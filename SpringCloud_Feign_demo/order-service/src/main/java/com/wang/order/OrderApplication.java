@@ -1,7 +1,7 @@
 package com.wang.order;
 
-import com.netflix.loadbalancer.IRule;
-import com.netflix.loadbalancer.RandomRule;
+import com.wang.feign.clients.UserClient;
+import com.wang.feign.config.DefaultFeignConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +12,9 @@ import org.springframework.web.client.RestTemplate;
 
 @MapperScan("com.wang.order.mapper")
 @SpringBootApplication
-@EnableFeignClients
+//@EnableFeignClients
+// 配置文件全局生效。全局生效就是当前服务作为服务消费者调用其他服务提供者的时候都采用改配置。
+@EnableFeignClients(clients = UserClient.class,defaultConfiguration = DefaultFeignConfiguration.class)
 public class OrderApplication {
 
     public static void main(String[] args) {

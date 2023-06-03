@@ -1,5 +1,6 @@
 package com.wang.order.pojo;
 
+import com.wang.feign.pojo.User;
 import lombok.Data;
 
 @Data

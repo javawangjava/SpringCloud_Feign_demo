@@ -44,6 +44,13 @@
             <artifactId>feign-httpclient</artifactId>
         </dependency>
 
+        <!--  引入feign-api的依赖      -->
+        <dependency>
+            <groupId>com.wang</groupId>
+            <artifactId>feign-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

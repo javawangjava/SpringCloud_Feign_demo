@@ -1,12 +1,12 @@
 package com.wang.order.service;
 
-import com.wang.order.clients.UserClient;
+
+import com.wang.feign.clients.UserClient;
+import com.wang.feign.pojo.User;
 import com.wang.order.mapper.OrderMapper;
 import com.wang.order.pojo.Order;
-import com.wang.order.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 
 @Service
