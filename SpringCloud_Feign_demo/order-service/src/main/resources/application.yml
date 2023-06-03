@@ -36,4 +36,9 @@ ribbon:
     clients: # 指定饥饿加载的服务名称
       - userservice
 
-
+feign:
+  client:
+    config:
+#      userservice: # 针对某个微服务的配置
+      default: # 这里用default就是全局配置，如果是写服务名称，则是针对某个微服务的配置
+        loggerLevel: Full   # 日志级别
