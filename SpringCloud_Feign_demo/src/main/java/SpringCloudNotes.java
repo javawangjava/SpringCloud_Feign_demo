@@ -164,10 +164,64 @@ public class SpringCloudNotes {
     *           4.在服务消费者要调用服务提供者的方法中使用FeignClient中定义的方法代替RestTemplate。
     *               4.1.在该类中注入FeignClient的对象，然后使用FeignClient对象来调用FeignClient中定义的方法来对服务消费者进行远程调用。
     *
+    *   Feign的日志配置:
+    *   1.方式一是配置文件，feign.client.config.xxx.loggerLevel；
+    *       1.1如果xxx是default则代表全局；
+    *       1.2如果xxx是服务名称，例如userservice则代表某服务；
+    *   2.方式二是java代码配置Logger.Level这个Bean；
+    *       2.1如果在@EnableFeignClients注解声明则代表全局；
+    *       2.2如果在@FeignClient注解中声明则代表某服务；
     *
     *
+    *   Feign的优化：Feign底层发起http请求，依赖于其它的框架。
+    *       1.日志级别尽量用basic
+    *       2.使用HttpClient或OKHttp代替URLConnection
+    *           ① 在服务消费者的pom文件中引入Apache的HttpClient依赖：<artifactId>feign-httpclient</artifactId>;
+    *           ② 在配置文件开启httpClient功能，设置连接池参数。
+    *
+    *
+    *   Feign的最佳实践：
+    *       1.让controller和FeignClient继承同一接口；
+    *       2.将FeignClient、POJO、Feign的默认配置都定义到一个项目中，供所有消费者使用。
+    *
+    *       实现最佳实践方式二的步骤如下：
+    *           首先创建一个module，命名为feign-api，然后引入feign的starter依赖
+    *           将order-service中编写的UserClient、User、DefaultFeignConfiguration都复制到feign-api项目中
+    *           在order-service中引入feign-api的依赖
+    *           修改order-service中的所有与上述三个组件有关的import部分，改成导入feign-api中的包
+    *           重启测试
+    *       不同包的FeignClient的导入有两种方式：
+    *           1.在@EnableFeignClients注解中添加basePackages，指定FeignClient所在的包@EnableFeignClients(clients = UserClient.class)；
+    *           2.在@EnableFeignClients注解中添加clients，指定具体FeignClient的字节码：@EnableFeignClients(clients = {UserClient.class})；
     * */
 
+    /*
+    * Gateway网关是我们服务的守门神，所有微服务的统一入口。
+    *   网关的核心功能特性：
+    *       权限控制：网关作为微服务入口，需要校验用户是是否有请求资格，如果没有则进行拦截。
+    *       路由和负载均衡：一切请求都必须先经过gateway，但网关不处理业务，而是根据某种规则，把请求转发到某个微服务，这个过程叫做路由。当然路由的目标服务有多个时，还需要做负载均衡。
+    *       限流：当请求流量过高时，在网关中按照下流的微服务能够接受的速度来放行请求，避免服务压力过大。
+    *   而SpringCloudGateway则是基于Spring5中提供的WebFlux，属于响应式编程的实现，具备更好的性能
+    *
+    *   Gateway基本步骤如下：
+    *       1. 创建SpringBoot工程gateway，引入网关依赖:<artifactId>spring-cloud-starter-gateway</artifactId>;<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>;
+    *       2. 编写启动类;
+    *       3. 编写基础配置和路由规则;
+    *       4. 启动网关服务进行测试;
+    *
+    *   Gateway断言工厂：在配置文件中写的断言规则只是字符串，这些字符串会被Predicate Factory读取并处理，转变为路由判断的条件；使用时查文档。
+    *
+    *   Gateway过滤器工厂
+    *       GatewayFilter是网关中提供的一种过滤器，可以对进入网关的请求和微服务返回的响应做处理；
+    *
+    *   Gateway全局过滤器：定义方式是实现GlobalFilter接口。
+    *       全局过滤器的作用也是处理一切进入网关的请求和微服务响应，与GatewayFilter的作用一样。
+    *       区别在于GatewayFilter通过配置定义，处理逻辑是固定的；而GlobalFilter的逻辑需要自己写代码实现。
+    *           在filter中编写自定义逻辑，可以实现下列功能：登录状态判断，权限校验，请求限流等。
+    *
+    *
+    *
+    *  */
 
 
 }
